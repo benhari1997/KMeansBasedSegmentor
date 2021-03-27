@@ -1,0 +1,52 @@
+image: adnrv/opencv
+
+stages:
+  - build
+  - test
+
+build-debug-stage:
+  stage: build
+  before_script:
+    - rm -rf external/googletest
+    - git clone --recursive https://github.com/google/googletest.git external/googletest
+  script:
+    - echo "Building debug config"
+    - mkdir debug
+    - cmake -S . -B debug/ -DCMAKE_BUILD_TYPE=DEBUG
+    - cmake --build debug/
+  artifacts:
+    paths:
+      - debug/
+      - external/googletest
+
+build-release-stage:
+  stage: build
+  before_script:
+    - rm -rf external/googletest
+    - git clone --recursive https://github.com/google/googletest.git external/googletest
+  script:
+    - echo "Building release config"
+    - mkdir release
+    - cmake -S . -B release/ -DCMAKE_BUILD_TYPE=RELEASE
+    - cmake --build release/
+  artifacts:
+    paths:
+      - release/
+  only:
+    refs:
+      - master
+
+test-debug-stage:
+  stage: test
+  script:
+    - echo "Debug mode testing"
+    - make test -C debug/ ARGS="--verbose"
+
+test-release-stage:
+  stage: test
+  script:
+    - echo "Release mode testing"
+    - make test -C release/ ARGS="--verbose"
+  only:
+    refs:
+      - master

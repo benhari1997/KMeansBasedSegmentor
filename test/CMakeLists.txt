@@ -1,0 +1,3 @@
+add_subdirectory(dataLibrary)
+add_subdirectory(generatorLibrary)
+add_subdirectory(segmentorLibrary)

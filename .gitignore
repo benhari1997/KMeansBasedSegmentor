@@ -1,0 +1,6 @@
+/build*
+/resources*
+.vs/
+.vs*
+.clang-format
+~*
